@@ -1,0 +1,70 @@
+---
+title: "Theoretical background"
+date: "`r Sys.Date()`"
+output:
+  html_vignette:
+    toc: yes
+vignette: |
+  %\VignetteIndexEntry{Theoretical background} 
+  %\VignetteEngine{knitr::rmarkdown} 
+  %\VignetteEncoding{UTF-8}
+bibliography: references.bib
+link-citations: true
+---
+
+```{r setup, echo=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning=FALSE)
+```
+
+## Creating Inter-character Distance Matrices
+
+### Types of morphological data
+
+Categorical morphological data (discrete characters) should be treated as factors when imported to calculate character distances, as the symbols used to represent different states are arbitrary (e.g., could be equally represented by letters, such as for DNA data). If continuous variables are used as phylogenetic characters, those should be read in from a separate file and treated as numeric data, since input values for each state (e.g., 0.234; 2.456; 3.567; etc) represent true distance between data points.
+
+### Treatment of inapplicable and missing data
+
+Categorical data including symbols for inapplicable and missing data (typically `"-"` and `"?"`, respectively) will be read in and treated as separate categories of data relative to numerical symbols for different character states (`"0"`, `"1"`, `"2"`, etc.). Therefore, there are a few options users may follow for handling morphological phylogenetic datasets to account for inapplicable/missing data before importing it into `EvoPhylo`. Users may either convert inapplicable/missing to `NA` or they may choose to keep the original symbols. 
+
+In the example provided below, converting inapplicable/missing conditions to `NA` will ignore the respective taxa with inapplicable/missing data to calculate inter-character distances. The resulting distance matrix will introduce `NaN` to every pairwise comparison involving two characters with `NA` (all comparisons including character 5, as well as any pairwise comparisons involving characters 4, 5 and 7) (Table 2-in blue). Statistical tests and clustering methods cannot utilize such matrices with `NaN` as data entries and removal of observations contributing to excessive `NaN` would have to be performed. However, removing observations with excessive inapplicable/missing data is not possible for character partitioning because each character in the dataset must be assigned to at least one partition (regardless of the amount of missing or inapplicable data). 
+
+```{r}
+library(EvoPhylo)
+d <- structure(list(`Taxon A` = c("0", "1", "0", "0", "?", "1", "?", "0", "1", "1"), 
+                    `Taxon B` = c("0", "1", "0", "?", "?", "1", "1", "0", "1", "1")),
+               row.names = paste0("Char", 1:10),
+               class = "data.frame")
+kableExtra::kbl(d, caption = "Table 1. Example dataset") |>
+  kableExtra::kable_styling(full_width = FALSE)
+```
+
+Besides, in comparisons between characters inclusive of states with `NA`, the latter will contribute 0 difference to the distance matrix. For instance, distance between characters 6 (1,1) and 7 (`NA`, 1) is 0 (Table 2-in red). The implicit assumption with option 1 is that unknown characters contribute 0 distance. Therefore, this approach biases the distance matrix by minimizing the overall distance between characters to the lowest possible values. It assumes that, whatever the true condition represented by the unknown state, it is always assumed to be equal to the known character states (e.g., character states scored as "1" for Taxa A and B).
+
+Alternatively, keeping the original inapplicable/missing data symbol will make the inapplicables/missing data to be treated as a distinct categorical variable relative to numeric symbols. As a result, pairwise comparisons with characters with unknown data will avoid the introduction of `NaN`, allowing all characters to be considered (Table 3-in blue). This approach assumes that unknown states are always different from any known states, which will bias the distance matrix by increasing the overall distance between characters. Fortunately, however, Gower distances (as used here) are normalized by the number of variables in the dataset (number of taxa in this case), which reduces this bias. For instance, in a simple comparison between two characters sampled from two taxa (A and B), e.g., character 6 (1,1) and character 7 (NA, 1) from the example in the online vignette, the raw distance between these characters is 1.0, but the Gower distance between them is 1/2 = 0.5 (Table 3-in red).
+
+
+```{r}
+gd <- get_gower_dist(d, numeric = TRUE)
+nas <- which(is.na(gd))
+for (i in nas) {
+  gd[i] <- kableExtra::cell_spec(gd[i], color = "blue")
+}
+gd[6,7] <- kableExtra::cell_spec(gd[6,7], color = "red")
+gd[7,6] <- kableExtra::cell_spec(gd[7,6], color = "red")
+k1 = kableExtra::kbl(gd, escape = FALSE, format = "html",
+                     caption = "Table 2. Distance matrix when converting inapplicable/missing conditions to “NA”") |> 
+  kableExtra::kable_styling(full_width = FALSE)
+
+gd <- get_gower_dist(d, numeric = FALSE)
+for (i in nas) {
+  gd[i] <- kableExtra::cell_spec(gd[i], color = "blue")
+}
+gd[6,7] <- kableExtra::cell_spec(gd[6,7], color = "red")
+gd[7,6] <- kableExtra::cell_spec(gd[7,6], color = "red")
+k2 = kableExtra::kbl(gd, escape = FALSE, caption = "Table 3. Distance matrix when keeping the original inapplicable/missing data symbols") |>
+  
+kableExtra::kable_styling(full_width = FALSE)
+knitr::kables(list(k1))
+knitr::kables(list(k2))
+```
+

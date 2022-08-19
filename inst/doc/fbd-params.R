@@ -14,7 +14,7 @@ data(posterior3p)
 
 ## -----------------------------------------------------------------------------
 ## Reshape imported combined log file from wide to long with FBD_reshape
-posterior3p_long <- FBD_reshape(posterior3p)
+posterior3p_long <- FBD_reshape(posterior3p, variables = NULL, log.type = "MrBayes")
 
 ## Show first 5 lines of combined log file
 head(posterior3p_long, 5)

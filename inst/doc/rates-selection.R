@@ -5,8 +5,31 @@ knitr::opts_chunk$set(echo=TRUE)
 library(EvoPhylo)
 
 ## ---- eval = FALSE------------------------------------------------------------
+#  ## Import all clock summary trees produced by BEAST2 from your local directory
+#  
+#  tree_clock1 = treeio::read.beast("tree_file_clock1.tre")
+#  tree_clock2 = treeio::read.beast("tree_file_clock2.tre")
+
+## -----------------------------------------------------------------------------
+data(tree_clock1)
+data(tree_clock2)
+
+## -----------------------------------------------------------------------------
+## Get table of clock rates with summary stats for each node in 
+## the tree for each relaxed clock partition 
+rate_table_means_beast2 <- get_clockrate_table_BEAST2(tree_clock1, tree_clock2, summary = "mean")
+
+## -----------------------------------------------------------------------------
+## Get all clocks in list
+all_clocks = list(tree_clock1, tree_clock2)
+## Get table of clock rates with summary stats for each node in 
+## the tree for each relaxed clock partition, with clocks as list
+rate_table_means_beast2 <- do.call(get_clockrate_table_BEAST2, args = c(all_clocks, list(summary = "mean")))
+
+## ---- eval = FALSE------------------------------------------------------------
 #  ## Import summary tree with three clock partitions produced by
 #  ## Mr. Bayes (.t or .tre files) from your local directory
+#  
 #  tree3p <- treeio::read.mrbayes("Tree3p.t")
 
 ## -----------------------------------------------------------------------------
@@ -15,7 +38,7 @@ data(tree3p)
 ## -----------------------------------------------------------------------------
 ## Get table of clock rates with summary stats for each node in 
 ## the tree for each relaxed clock partition 
-rate_table_means_no_clades3 <- get_clockrate_table(tree3p, summary = "mean")
+rate_table_means_no_clades3 <- get_clockrate_table_MrBayes(tree3p, summary = "mean")
 
 ## ---- eval = FALSE------------------------------------------------------------
 #  ## Export the rate tables
@@ -26,7 +49,7 @@ rate_table_means_no_clades3 <- get_clockrate_table(tree3p, summary = "mean")
 library(ggtree)
 tree_nodes <- ggtree(tree3p, branch.length = "none", size = 0.05) +
   geom_tiplab(size = 2, linesize = 0.01, color = "black", offset = 0.5) +
-  geom_label(aes(label = node), size = 2, color="purple", position = "dodge")
+  geom_label(aes(label = node), size = 2, color="purple")
 tree_nodes
 
 ## ---- eval = FALSE------------------------------------------------------------
@@ -93,7 +116,7 @@ p12 + p13 + p23 + plot_layout(ncol = 2)
 data(tree1p)
 
 ## -----------------------------------------------------------------------------
-rate_table_means_no_clades1 <- get_clockrate_table(tree1p, summary = "mean")
+rate_table_means_no_clades1 <- get_clockrate_table_MrBayes(tree1p, summary = "mean")
 
 ## ---- eval = FALSE------------------------------------------------------------
 #  ## Export the rate tables
@@ -103,6 +126,7 @@ rate_table_means_no_clades1 <- get_clockrate_table(tree1p, summary = "mean")
 #  rate_table_clades_means1 <- read.csv("RateTable_Means1_Clades.csv", header = TRUE)
 
 ## -----------------------------------------------------------------------------
+#Below, we use the rate table with clade membership `rate_table_clades_means1` that accompanies `EvoPhylo`.
 data(rate_table_clades_means1)
 
 ## ----eval = FALSE-------------------------------------------------------------

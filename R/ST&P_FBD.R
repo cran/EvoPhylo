@@ -69,25 +69,46 @@ combine_log <- function(path = ".", burnin = .25, downsample = 1e4) {
 }
 
 #Reshape AllRuns from wide to long with Time_bins as time and parameters as varying
-FBD_reshape <- function(posterior) {
-  if (!is.data.frame(posterior) ||
-      !any(startsWith(names(posterior), "net_speciation_")) ||
-      !any(startsWith(names(posterior), "relative_extinction_")) ||
-      !any(startsWith(names(posterior), "relative_fossilization_"))) {
-    stop("'posterior' must be a data frame with two or more columns for net_speciation, relative_extinction, and relative_fossilization.", call. = FALSE)
+#' @param variables Names of FBD rate variables in the log. If NULL (default), will attempt to auto-detect the names and log type.
+#' @param log.type Name of the software which produced the log (currently supported: MrBayes or BEAST2).
+FBD_reshape <- function(posterior, variables = NULL, log.type = c("MrBayes", "BEAST2")) {
+  if (!is.data.frame(posterior)) {
+    stop("'posterior' must be a data frame.", call. = FALSE)
+  }
+  if(!is.null(variables)) {
+    exist = sapply(names, function(nm) {
+      any(startsWith(names(posterior), nm))
+    })
+    if(any(!exist)) stop("Specified variables not found in posterior")
+
+    if(length(log.type) > 1 || !log.type %in% c("MrBayes", "BEAST2")) {
+      stop("Log type must be one of 'MrBayes' or 'BEAST2'")
+    }
+  }
+  else {
+    autodetect = detect_posterior(posterior)
+    variables = autodetect$variables
+    log.type = autodetect$log.type
   }
 
+  varying = lapply(variables, function(v) {
+    names(posterior)[startsWith(names(posterior), v)]
+  })
+  idname = if(log.type == "MrBayes") "Gen" else "Sample"
+
   posterior_long <- reshape(posterior, direction = "long",
-                          varying = list(names(posterior)[startsWith(names(posterior), "net_speciation_")],
-                                         names(posterior)[startsWith(names(posterior), "relative_extinction_")],
-                                         names(posterior)[startsWith(names(posterior), "relative_fossilization_")]),
-                          v.names = c("net_speciation", "relative_extinction", "relative_fossilization"),
-                          timevar = "Time_bin",
-                          sep = "_",
-                          idvar = "Gen", ids = posterior[["Gen"]])
+                            varying = varying,
+                            v.names = variables,
+                            timevar = "Time_bin",
+                            sep = if(log.type == "MrBayes") "_" else ".",
+                            idvar = "Gen", ids = posterior[[idname]])
+
   posterior_long[["Time_bin"]] <- factor(posterior_long[["Time_bin"]])
   rownames(posterior_long) <- NULL
   attr(posterior_long, "reshapeLong") <- NULL
+
+  attr(posterior_long, "log.type") = log.type
+  attr(posterior_long, "variables") = variables
 
   posterior_long
 }
@@ -95,11 +116,11 @@ FBD_reshape <- function(posterior) {
 #Get summary (n, mean, sd, 5 number) of parameters values by time bin
 FBD_summary <- function(posterior, file = NULL, digits = 3) {
 
-  parameters <- c("net_speciation", "relative_extinction", "relative_fossilization")
-
-  if (!is.data.frame(posterior) || !all(c("Time_bin", parameters) %in% names(posterior))) {
+  if (!is.data.frame(posterior) || !"Time_bin" %in% names(posterior) || is.null(attr(posterior, "variables"))) {
     stop("'posterior' must be a data frame of MCMC posterior samples of FBD parameters.", call. = FALSE)
   }
+
+  parameters = attr(posterior, "variables")
 
   time.bins <- sort(unique(posterior$Time_bin))
 
@@ -151,21 +172,23 @@ oneSummary <- function(x, digits = 3) {
 #Plot density of one parameter by time bin; density or violin plots
 FBD_dens_plot <- function(posterior, parameter, type = "density", stack = FALSE, color = "red") {
 
-  parameters <- c("net_speciation", "relative_extinction", "relative_fossilization")
-
-  if (!is.data.frame(posterior) || !all(c("Time_bin", parameters) %in% names(posterior))) {
+  if (!is.data.frame(posterior) || !"Time_bin" %in% names(posterior) || is.null(attr(posterior, "variables"))) {
     stop("'posterior' must be a data frame of MCMC posterior samples of FBD parameters.", call. = FALSE)
   }
 
+  parameters = attr(posterior, "variables")
+
   type <- match.arg(type, c("density", "violin"))
 
-  param.names <- setNames(gsub("_", " ", firstup(parameters), fixed = TRUE),
-                          parameters)
-
   if (missing(parameter)) {
-    stop("'parameter' must be specified.", call. = FALSE)
+    stop(paste("'parameter' must be one of:", paste0(parameters, collapse = " ")), call. = FALSE)
   }
   parameter <- match.arg(parameter, parameters, several.ok = FALSE)
+
+  if(attr(posterior, "log.type") == "MrBayes") {
+    param.names <- setNames(gsub("_", " ", firstup(parameters), fixed = TRUE), parameters)
+  }
+  else param.names = setNames(beast2.names(parameters), parameters)
 
   posterior <- posterior[c("Time_bin", parameter)]
 
@@ -210,11 +233,11 @@ FBD_dens_plot <- function(posterior, parameter, type = "density", stack = FALSE,
 #Normality tests within time bin, across time bin, and pooled within time bin
 #Homscedasticity tests across time bin
 FBD_tests1 <- function(posterior, downsample = TRUE) {
-  parameters <- c("net_speciation", "relative_extinction", "relative_fossilization")
-
-  if (!is.data.frame(posterior) || !all(c("Time_bin", parameters) %in% names(posterior))) {
+  if (!is.data.frame(posterior) || !"Time_bin" %in% names(posterior) || is.null(attr(posterior, "variables"))) {
     stop("'posterior' must be a data frame of MCMC posterior samples of FBD parameters.", call. = FALSE)
   }
+
+  parameters = attr(posterior, "variables")
 
   posterior$Time_bin <- factor(posterior$Time_bin)
 
@@ -299,11 +322,11 @@ FBD_tests1 <- function(posterior, downsample = TRUE) {
 #Test differences in location for each parameter between time bins
 FBD_tests2 <- function(posterior, p.adjust.method = "fdr") {
 
-  parameters <- c("net_speciation", "relative_extinction", "relative_fossilization")
-
-  if (!is.data.frame(posterior) || !all(c("Time_bin", parameters) %in% names(posterior))) {
+  if (!is.data.frame(posterior) || !"Time_bin" %in% names(posterior) || is.null(attr(posterior, "variables"))) {
     stop("'posterior' must be a data frame of MCMC posterior samples of FBD parameters.", call. = FALSE)
   }
+
+  parameters = attr(posterior, "variables")
 
   posterior$Time_bin <- factor(posterior$Time_bin)
 
@@ -362,21 +385,24 @@ FBD_tests2 <- function(posterior, p.adjust.method = "fdr") {
 #Visualize deviations from normality for each parameter by time bin using
 #density plots
 FBD_normality_plot <- function(posterior) {
-  parameters <- c("net_speciation", "relative_extinction", "relative_fossilization")
 
-  if (!is.data.frame(posterior) || !all(c("Time_bin", parameters) %in% names(posterior))) {
+  if (!is.data.frame(posterior) || !"Time_bin" %in% names(posterior) || is.null(attr(posterior, "variables"))) {
     stop("'posterior' must be a data frame of MCMC posterior samples of FBD parameters.", call. = FALSE)
   }
 
-  param.names <- setNames(gsub("_", " ", firstup(parameters), fixed = TRUE),
-                          parameters)
+  parameters = attr(posterior, "variables")
+
+  if(attr(posterior, "log.type") == "MrBayes") {
+    param.names <- setNames(gsub("_", " ", firstup(parameters), fixed = TRUE), parameters)
+  }
+  else param.names = setNames(beast2.names(parameters), parameters)
 
   posterior <- posterior[c("Time_bin", parameters)]
 
   time.bins <- sort(unique(posterior$Time_bin))
 
   posterior$Time_bin <- factor(posterior$Time_bin, levels = time.bins,
-                             labels = paste("Time bin", time.bins))
+                               labels = paste("Time bin", time.bins))
 
   posterior_long <- reshape(posterior, direction = "long",
                             v.names = "vals",
