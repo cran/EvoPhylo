@@ -18,7 +18,7 @@ for (i in nas) {
 }
 gd[6,7] <- kableExtra::cell_spec(gd[6,7], color = "red")
 gd[7,6] <- kableExtra::cell_spec(gd[7,6], color = "red")
-k1 = kableExtra::kbl(gd, escape = FALSE, format = "html",
+k1 <- kableExtra::kbl(gd, escape = FALSE, format = "html",
                      caption = "Table 2. Distance matrix when converting inapplicable/missing conditions to “NA”") |> 
   kableExtra::kable_styling(full_width = FALSE)
 
@@ -28,7 +28,7 @@ for (i in nas) {
 }
 gd[6,7] <- kableExtra::cell_spec(gd[6,7], color = "red")
 gd[7,6] <- kableExtra::cell_spec(gd[7,6], color = "red")
-k2 = kableExtra::kbl(gd, escape = FALSE, caption = "Table 3. Distance matrix when keeping the original inapplicable/missing data symbols") |>
+k2 <- kableExtra::kbl(gd, escape = FALSE, caption = "Table 3. Distance matrix when keeping the original inapplicable/missing data symbols") |>
   
 kableExtra::kable_styling(full_width = FALSE)
 knitr::kables(list(k1))

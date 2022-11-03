@@ -1,5 +1,5 @@
 Package: EvoPhylo
-Version: 0.3
+Version: 0.3.2
 Title: Pre- And Postprocessing of Morphological Data from Relaxed Clock
         Bayesian Phylogenetics
 Description: Performs automated morphological character partitioning for 
@@ -24,7 +24,7 @@ Depends: R (>= 4.0.0)
 Imports: ape (>= 1.16.2), dplyr (>= 1.0.8), cluster (>= 2.1.2),
         deeptime (>= 0.2.0), ggplot2 (>= 3.3.5), ggrepel (>= 0.9.1),
         ggtree (>= 3.1.5.902), patchwork, treeio (>= 1.16.2), Rtsne (>=
-        0.15), unglue (>= 0.1.0)
+        0.15), unglue (>= 0.1.0), devtools (>= 2.4.3)
 Suggests: kableExtra, knitr, rmarkdown
 Encoding: UTF-8
 LazyData: false
@@ -35,11 +35,11 @@ BugReports: https://github.com/tiago-simoes/EvoPhylo/issues
 VignetteBuilder: knitr
 RoxygenNote: 7.2.1
 NeedsCompilation: no
-Packaged: 2022-08-19 12:52:34 UTC; tiago
+Packaged: 2022-11-03 16:33:02 UTC; tiago
 Author: Tiago Simoes [cre, aut] (<https://orcid.org/0000-0003-4716-649X>),
   Noah Greifer [aut] (<https://orcid.org/0000-0003-3067-7154>),
   Joelle Barido-Sottani [aut] (<https://orcid.org/0000-0002-5220-5468>),
   Stephanie Pierce [aut] (<https://orcid.org/0000-0003-0717-1841>)
 Maintainer: Tiago Simoes <trsimoes87@gmail.com>
 Repository: CRAN
-Date/Publication: 2022-08-19 13:30:02 UTC
+Date/Publication: 2022-11-03 17:00:02 UTC

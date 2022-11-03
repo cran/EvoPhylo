@@ -19,8 +19,8 @@
 #' @examples
 #' #Import all clock summary trees produced by BEAST2 from your local directory
 #' \dontrun{
-#' tree_clock1 = treeio::read.beast("tree_file_clock1.tre")
-#' tree_clock2 = treeio::read.beast("tree_file_clock2.tre")
+#' tree_clock1 <- treeio::read.beast("tree_file_clock1.tre")
+#' tree_clock2 <- treeio::read.beast("tree_file_clock2.tre")
 #' }
 #'
 #' #Or use the example BEAST2 multiple clock trees that accompany EvoPhylo.
@@ -28,29 +28,29 @@
 #' data(tree_clock2)
 #'
 #' # obtain the rate table from BEAST2 trees
-#' rate_table = get_clockrate_table_BEAST2(tree_clock1, tree_clock2, summary = "mean")
+#' rate_table <- get_clockrate_table_BEAST2(tree_clock1, tree_clock2, summary = "mean")
 #'
 #' @md
 get_clockrate_table_BEAST2 <- function(..., summary = "median", drop_dummy = NULL) {
-  trees = list(...)
+  trees <- list(...)
   if(length(trees) == 0) stop("No trees provided")
 
   summary <- match.arg(summary, c("mean", "median"))
-  name = if(summary == "mean") "rate" else "rate_median"
+  name <- if(summary == "mean") "rate" else "rate_median"
 
   if (!is.null(drop_dummy)) {
     trees <- lapply(trees, function(tr) treeio::drop.tip(tr, drop_dummy))
   }
 
-  rate_table = data.frame(nodes = as.integer(trees[[1]]@data$node))
+  rate_table <- data.frame(nodes = as.integer(trees[[1]]@data$node))
   for(tr in trees) {
-    data = tr@data[match(rate_table$nodes, as.integer(tr@data$node)), ] #get rates in same order as 1st column
-    rate_table = cbind(rate_table, data[[name]])
+    data <- tr@data[match(rate_table$nodes, as.integer(tr@data$node)), ] #get rates in same order as 1st column
+    rate_table <- cbind(rate_table, data[[name]])
   }
-  colnames(rate_table)[2:ncol(rate_table)] = paste0("rates", 1:(ncol(rate_table) - 1))
-  row.names(rate_table) = NULL
+  colnames(rate_table)[2:ncol(rate_table)] <- paste0("rates", 1:(ncol(rate_table) - 1))
+  row.names(rate_table) <- NULL
 
-  rate_table
+  return(rate_table)
 }
 
 #Rate Table - MrBayes version
@@ -164,7 +164,7 @@ clockrate_dens_plot <- function(rate_table, clock = NULL, stack = FALSE, nrow = 
   rt <- clock_reshape(rate_table)
   levels(rt$clock) <- paste("Clock", levels(rt$clock))
 
-  rateplot <- ggplot(data = rt, mapping = aes(x = .data$rate, fill = .data$clade,
+  rateplot <- ggplot(data = rt, mapping = aes(x = .data$rates, fill = .data$clade,
                                               color = .data$clade)) +
     geom_hline(yintercept = 0) +
     geom_density(position = if (stack) "stack" else "identity",

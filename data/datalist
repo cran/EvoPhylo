@@ -1,9 +1,9 @@
+RateTable_Means_1p_Clades
+RateTable_Means_3p_Clades
 characters
 post_trees
 posterior1p
 posterior3p
-rate_table_clades_means1
-rate_table_clades_means3
 tree1p
 tree3p
 tree_clock1
