@@ -1,10 +1,10 @@
-## ---- setup, echo=FALSE-------------------------------------------------------
+## ----setup, echo=FALSE--------------------------------------------------------
 knitr::opts_chunk$set(echo = TRUE)
 
-## ---- eval = FALSE------------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #  library(EvoPhylo)
 
-## ---- include=FALSE-----------------------------------------------------------
+## ----include=FALSE------------------------------------------------------------
 devtools::load_all(".")
 
 ## -----------------------------------------------------------------------------
@@ -15,7 +15,7 @@ log_file <- system.file("extdata", "ex_offset.log", package = "EvoPhylo")
 ## Transform the trees to add a dummy tip
 converted_trees <- offset.to.dummy.metadata(trees_file, log_file)
 
-## ---- eval=FALSE--------------------------------------------------------------
+## ----eval=FALSE---------------------------------------------------------------
 #  ## Transform the trees to add a dummy tip and save to file
 #  converted_trees <- offset.to.dummy.metadata(trees_file, log_file,
 #                                              output.file = "transformed_offset.trees")
@@ -29,7 +29,7 @@ final_tree <- drop.dummy.beast(tree_file)
 final_tree$offset
 final_tree$tree
 
-## ---- eval=FALSE--------------------------------------------------------------
+## ----eval=FALSE---------------------------------------------------------------
 #  ## Remove the dummy tip and save to file
 #  final_tree <- drop.dummy.beast(tree_file, output.file = "ex_final_mcc.tre")
 

@@ -11,7 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2022-11-03" />
+<meta name="date" content="2025-08-27" />
 
 <title>Analyzing Trees With Offsets</title>
 
@@ -360,7 +360,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 <h1 class="title toc-ignore">Analyzing Trees With Offsets</h1>
-<h4 class="date">2022-11-03</h4>
+<h4 class="date">2025-08-27</h4>
 
 
 <div id="TOC">
@@ -472,7 +472,7 @@ extinct tree with an offset.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>final_tree<span class="sc">$</span>tree</span></code></pre></div>
 <pre><code>## &#39;treedata&#39; S4 object that stored information
 ## of
-##  &#39;C:/Users/tiago/AppData/Local/Temp/RtmpMVYSgW/Rbuild74502b2b1bb8/EvoPhylo/inst/extdata/ex_offset.MCC.tre&#39;.
+##  &#39;C:/Users/tiago/AppData/Local/Temp/RtmpKyjlA3/Rbuild778056012dd8/EvoPhylo/inst/extdata/ex_offset.MCC.tre&#39;.
 ## 
 ## ...@ phylo:
 ## 
@@ -482,30 +482,31 @@ extinct tree with an offset.</p>
 ##   Floweria_anomala, Floweria_arctostriata, Floweria_becraftensis,
 ## Floweria_chemungensis1, Floweria_chemungensis2, Floweria_chemungensis3, ...
 ## 
-## Rooted; includes branch lengths.
+## Rooted; includes branch length(s).
 ## 
 ## with the following features available:
 ##   &#39;height&#39;, &#39;height_0.95_HPD&#39;, &#39;height_median&#39;, &#39;height_range&#39;, &#39;length&#39;,
 ## &#39;length_0.95_HPD&#39;, &#39;length_median&#39;, &#39;length_range&#39;, &#39;posterior&#39;, &#39;rate&#39;,
 ## &#39;rate_0.95_HPD&#39;, &#39;rate_median&#39;, &#39;rate_range&#39;.
 ## 
-## # The associated data tibble abstraction: 38 x 16
+## # The associated data tibble abstraction: 38 × 16
 ## # The &#39;node&#39;, &#39;label&#39; and &#39;isTip&#39; are from the phylo tree.
 ##     node label    isTip height height_0.95_HPD height_median height_range length
 ##    &lt;int&gt; &lt;chr&gt;    &lt;lgl&gt; &lt;name&gt; &lt;list&gt;          &lt;named list&gt;  &lt;list&gt;        &lt;dbl&gt;
-##  1     1 Floweri~ TRUE  &lt;dbl&gt;  &lt;dbl [2]&gt;       &lt;dbl [1]&gt;     &lt;dbl [2]&gt;     2.44 
-##  2     2 Floweri~ TRUE  &lt;dbl&gt;  &lt;dbl [2]&gt;       &lt;dbl [1]&gt;     &lt;dbl [2]&gt;     3.50 
-##  3     3 Floweri~ TRUE  &lt;dbl&gt;  &lt;dbl [2]&gt;       &lt;dbl [1]&gt;     &lt;dbl [2]&gt;     2.65 
-##  4     4 Floweri~ TRUE  &lt;dbl&gt;  &lt;dbl [2]&gt;       &lt;dbl [1]&gt;     &lt;dbl [2]&gt;     0.804
-##  5     5 Floweri~ TRUE  &lt;dbl&gt;  &lt;dbl [2]&gt;       &lt;dbl [1]&gt;     &lt;dbl [2]&gt;     2.46 
-##  6     6 Floweri~ TRUE  &lt;dbl&gt;  &lt;dbl [2]&gt;       &lt;dbl [1]&gt;     &lt;dbl [2]&gt;    11.4  
-##  7     7 Floweri~ TRUE  &lt;dbl&gt;  &lt;dbl [2]&gt;       &lt;dbl [1]&gt;     &lt;dbl [2]&gt;     0.360
-##  8     8 Floweri~ TRUE  &lt;dbl&gt;  &lt;dbl [2]&gt;       &lt;dbl [1]&gt;     &lt;dbl [2]&gt;    11.6  
-##  9     9 Floweri~ TRUE  &lt;dbl&gt;  &lt;dbl [2]&gt;       &lt;dbl [1]&gt;     &lt;dbl [2]&gt;     0.597
-## 10    10 Floweri~ TRUE  &lt;dbl&gt;  &lt;dbl [2]&gt;       &lt;dbl [1]&gt;     &lt;dbl [2]&gt;     1.70 
-## # ... with 28 more rows, and 8 more variables: length_0.95_HPD &lt;list&gt;,
-## #   length_median &lt;dbl&gt;, length_range &lt;list&gt;, posterior &lt;dbl&gt;, rate &lt;dbl&gt;,
-## #   rate_0.95_HPD &lt;list&gt;, rate_median &lt;dbl&gt;, rate_range &lt;list&gt;</code></pre>
+##  1     1 Floweri… TRUE  &lt;dbl&gt;  &lt;dbl [2]&gt;       &lt;dbl [1]&gt;     &lt;dbl [2]&gt;     2.44 
+##  2     2 Floweri… TRUE  &lt;dbl&gt;  &lt;dbl [2]&gt;       &lt;dbl [1]&gt;     &lt;dbl [2]&gt;     3.50 
+##  3     3 Floweri… TRUE  &lt;dbl&gt;  &lt;dbl [2]&gt;       &lt;dbl [1]&gt;     &lt;dbl [2]&gt;     2.65 
+##  4     4 Floweri… TRUE  &lt;dbl&gt;  &lt;dbl [2]&gt;       &lt;dbl [1]&gt;     &lt;dbl [2]&gt;     0.804
+##  5     5 Floweri… TRUE  &lt;dbl&gt;  &lt;dbl [2]&gt;       &lt;dbl [1]&gt;     &lt;dbl [2]&gt;     2.46 
+##  6     6 Floweri… TRUE  &lt;dbl&gt;  &lt;dbl [2]&gt;       &lt;dbl [1]&gt;     &lt;dbl [2]&gt;    11.4  
+##  7     7 Floweri… TRUE  &lt;dbl&gt;  &lt;dbl [2]&gt;       &lt;dbl [1]&gt;     &lt;dbl [2]&gt;     0.360
+##  8     8 Floweri… TRUE  &lt;dbl&gt;  &lt;dbl [2]&gt;       &lt;dbl [1]&gt;     &lt;dbl [2]&gt;    11.6  
+##  9     9 Floweri… TRUE  &lt;dbl&gt;  &lt;dbl [2]&gt;       &lt;dbl [1]&gt;     &lt;dbl [2]&gt;     0.597
+## 10    10 Floweri… TRUE  &lt;dbl&gt;  &lt;dbl [2]&gt;       &lt;dbl [1]&gt;     &lt;dbl [2]&gt;     1.70 
+## # ℹ 28 more rows
+## # ℹ 8 more variables: length_0.95_HPD &lt;list&gt;, length_median &lt;dbl&gt;,
+## #   length_range &lt;list&gt;, posterior &lt;dbl&gt;, rate &lt;dbl&gt;, rate_0.95_HPD &lt;list&gt;,
+## #   rate_median &lt;dbl&gt;, rate_range &lt;list&gt;</code></pre>
 <p>As before, we can also save the tree directly to a file.</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Remove the dummy tip and save to file</span></span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>final_tree <span class="ot">&lt;-</span> <span class="fu">drop.dummy.beast</span>(tree_file, <span class="at">output.file =</span> <span class="st">&quot;ex_final_mcc.tre&quot;</span>)</span></code></pre></div>

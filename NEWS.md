@@ -2,9 +2,21 @@
 ---
 `EvoPhylo` News and Updates
 ======
+## Development: EvoPhylo 0.3.5
+(August 26th, 2025)
+* Function `combine_log` now also reads and combine log files from BEAST2 and MCMCTREE
+* Added Z-transformation for functions `plot_back_rates` and `plot_treerates_sgn`
+* New function `write_partitioned_alignments2` write alignment partitions as separate alignment files for various data types
+* New function `clade_membership`designates clade membership for each tip for downstream analyses summarizing rates for each clade
+
+## Development: EvoPhylo 0.3.3
+(July 21st, 2023)
+
+* Function `plot_back_rates` corrected for MrBayes.
+* New warnings and import of MrBayes single {all} clock partition for `plot_treerates_sgn`.
 
 ## Development: EvoPhylo 0.3.2
-(OCtober 31st, 2022)
+(October 31st, 2022)
 
 * New function `plot_back_rates` and updates on vignettes.
 

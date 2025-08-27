@@ -30,7 +30,7 @@ A data frame of posterior parameter estimates (log file). From Mr.Bayes, it incl
      From BEAST2, it will include at least one "rate<filename>.mean" column indicating the mean (background) clock rate estimate for each generation. If there are "P" unlinked clock partitions in BEAST2, there will be P x "rate<filename>.mean" columns (one for each partition) in the posterior log file.
 }
   \item{trans}{
-Type of data transformation to perform on background rates extracted from the posterior log file from Mr. Bayes or BEAST2. Options include "none" (if rates are normally distributed), natural log transformation "log", and log of base 10 transformation "log10". The necessity of using data transformation can be tested using the function \code{\link{plot_back_rates}}.
+Type of data transformation to perform on background rates extracted from the posterior log file from Mr. Bayes or BEAST2. Options include "none" (if rates are normally distributed), natural log transformation "log", and log of base 10 transformation "log10"". The necessity of using data transformation can be tested using the function \code{\link{plot_back_rates}}.
 }
   \item{summary}{
 Only when using Mr. Bayes trees. The rate summary stats chosen to calculate selection mode. Only rates "mean" and "median" are allowed. Default is "mean".
@@ -45,7 +45,7 @@ The clock partition number to calculate selection mode. Ignored if only one cloc
 A vector of threshold values. Default is to display thresholds of ±1 relative standard deviation (SD) of the relative posterior clock rates. Should be specified as a number of standard deviations (e.g., \code{"1 SD"}) or the confidence level for a confidence interal around the mean relative posterior clockrate (e.g., \code{"95\%"}). Multiple values are allowed to produce a plot with multiple thresholds. Set to \code{NULL} to omit thresholds.
 }
   \item{low, mid, high}{
-Colors passed to \code{\link{scale_color_steps2}} to control the colors of the branches based on which thresholds are exceeded. When no thresholds are supplied, use \code{mid} to control the color of the tree.
+Colors passed to \code{\link[ggplot2]{scale_color_steps2}} to control the colors of the branches based on which thresholds are exceeded. When no thresholds are supplied, use \code{mid} to control the color of the tree.
 }
   \item{branch_size}{
 The thickness of the lines that form the tree.
