@@ -37,6 +37,11 @@ final_tree$tree
 ## Find the example MCC tree from the package
 tree_file_mb <- system.file("extdata", "tree_mb_dummy.tre", package = "EvoPhylo")
 
-## Remove the dummy tip and save to file
-final_tree_mb <- drop.dummy.mb(tree_file_mb, output.file = "tree_mb_final.tre")
+## ----eval = FALSE-------------------------------------------------------------
+#  ## Remove the dummy tip and save to file
+#  final_tree_mb <- drop.dummy.mb(tree_file_mb, output.file = "tree_mb_final.tre")
+
+## ----include = FALSE----------------------------------------------------------
+## Same as above, but writing to a temporary folder (CRAN policy)
+final_tree_mb <- drop.dummy.mb(tree_file_mb, output.file = file.path(tempdir(), "tree_mb_final.tre"))
 

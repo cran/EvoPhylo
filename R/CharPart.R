@@ -36,6 +36,7 @@ get_sil_widths <- function(dist_mat, max.k = 10) {
 
 #--------------------------------------------------------------------------------------
 #Plot silhouette widths
+#' @export
 plot.sil_width_df <- function(x, ...) {
   ggplot(data = x) +
     geom_line(aes(x = .data$k, y = .data$sil_width), ...) +
@@ -79,6 +80,7 @@ make_clusters <- function(dist_mat, k, tsne = FALSE, tsne_dim = 2,
 
 
 #--------------------------------------------------------------------------------------
+#' @export
 plot.cluster_df <- function(x, seed = NA, nrow = 1, ...) {
 
   if (sum(startsWith(names(x), "tSNE_Dim")) > 1) {

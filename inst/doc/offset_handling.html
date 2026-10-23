@@ -11,7 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 
 
-<meta name="date" content="2025-08-27" />
+<meta name="date" content="2026-10-23" />
 
 <title>Analyzing Trees With Offsets</title>
 
@@ -50,7 +50,7 @@ overflow: visible;
 </style>
 <style type="text/css" data-origin="pandoc">
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -61,7 +61,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
 { counter-reset: source-line 0; }
@@ -149,6 +149,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; }
 div.csl-bib-body { }
 div.csl-entry {
 clear: both;
+margin-bottom: 0em;
 }
 .hanging div.csl-entry {
 margin-left:2em;
@@ -360,7 +361,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 
 
 <h1 class="title toc-ignore">Analyzing Trees With Offsets</h1>
-<h4 class="date">2025-08-27</h4>
+<h4 class="date">2026-10-23</h4>
 
 
 <div id="TOC">
@@ -406,13 +407,13 @@ fossil tip will be known a priori). However, using fixed point age value
 to all fossils creates important estimate biases, and age uncertainty at
 the tips should be accounted by allowing them to be estimated within a
 time range, as discuss in <span class="citation">Barido‐Sottani et al.
-(<a href="#ref-BaridoSottani2020" role="doc-biblioref">2020</a>)</span>.
-This presents issues when analyzing fully extinct clades, because all
-tip ages are variable and are allowed to be estimated within a time
-range, and each posterior tree will likely have a distinct age for the
-youngest taxon and thus no common fixed point in the past to establish
-the rescaling among all posterior trees. To address this issue, a few
-strategies are available:</p>
+(<a href="#ref-BaridoSottani2020">2020</a>)</span>. This presents issues
+when analyzing fully extinct clades, because all tip ages are variable
+and are allowed to be estimated within a time range, and each posterior
+tree will likely have a distinct age for the youngest taxon and thus no
+common fixed point in the past to establish the rescaling among all
+posterior trees. To address this issue, a few strategies are
+available:</p>
 <div id="analyzing-trees-with-offset-ages-beast2" class="section level2">
 <h2>Analyzing Trees With Offset ages (BEAST2)</h2>
 <p>The SA package for <a href="http://www.beast2.org/">BEAST2</a>
@@ -430,7 +431,7 @@ the resulting MCC tree to produce the final MCC tree. These can be done
 by performing by following steps and functions from
 <code>EvoPhylo</code>:</p>
 <p>Load the <strong>EvoPhylo</strong> package</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(EvoPhylo)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(EvoPhylo)</span></code></pre></div>
 <div id="import-the-posterior-tree-distribution." class="section level3">
 <h3>1. Import the posterior tree distribution.</h3>
 <p>First we import the posterior tree distribution and log file produced
@@ -440,17 +441,17 @@ correct age in the tree, we are going to add a “dummy” tip to each
 phylogeny. This dummy tip will have age 0 for each sample, and so the
 length of the age between this tip and the root of the tree will encode
 the age of the tree including the offset.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>trees_file <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;ex_offset.trees&quot;</span>, <span class="at">package =</span> <span class="st">&quot;EvoPhylo&quot;</span>)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>log_file <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;ex_offset.log&quot;</span>, <span class="at">package =</span> <span class="st">&quot;EvoPhylo&quot;</span>)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="do">## Transform the trees to add a dummy tip</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>converted_trees <span class="ot">&lt;-</span> <span class="fu">offset.to.dummy.metadata</span>(trees_file, log_file)</span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>trees_file <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;ex_offset.trees&quot;</span>, <span class="at">package =</span> <span class="st">&quot;EvoPhylo&quot;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>log_file <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;ex_offset.log&quot;</span>, <span class="at">package =</span> <span class="st">&quot;EvoPhylo&quot;</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="do">## Transform the trees to add a dummy tip</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>converted_trees <span class="ot">&lt;-</span> <span class="fu">offset.to.dummy.metadata</span>(trees_file, log_file)</span></code></pre></div>
 <pre><code>## [1] 364.0323</code></pre>
 <p>Here we output the transformed trees to a variable, but in practice
 it is often more useful to write them directly to a new trees file.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Transform the trees to add a dummy tip and save to file</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>converted_trees <span class="ot">&lt;-</span> <span class="fu">offset.to.dummy.metadata</span>(trees_file, log_file, </span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>                                            <span class="at">output.file =</span> <span class="st">&quot;transformed_offset.trees&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="do">## Transform the trees to add a dummy tip and save to file</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>converted_trees <span class="ot">&lt;-</span> <span class="fu">offset.to.dummy.metadata</span>(trees_file, log_file, </span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>                                            <span class="at">output.file =</span> <span class="st">&quot;transformed_offset.trees&quot;</span>)</span></code></pre></div>
 </div>
 <div id="summarize-the-modified-tree-distribution" class="section level3">
 <h3>2. Summarize the modified tree distribution</h3>
@@ -462,17 +463,17 @@ as usual, for instance using TreeAnnotator to produce an MCC tree.</p>
 <p>Our summary tree will include the dummy tip that we added earlier, so
 the last step of the process is to remove it, and get back the proper
 extinct tree with an offset.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Find the example MCC tree from the package</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>tree_file <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;ex_offset.MCC.tre&quot;</span>, <span class="at">package =</span> <span class="st">&quot;EvoPhylo&quot;</span>)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="do">## Then remove the dummy tip</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>final_tree <span class="ot">&lt;-</span> <span class="fu">drop.dummy.beast</span>(tree_file)</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="do">## The output contains the final tree and the offset</span></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>final_tree<span class="sc">$</span>offset</span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="do">## Find the example MCC tree from the package</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>tree_file <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;ex_offset.MCC.tre&quot;</span>, <span class="at">package =</span> <span class="st">&quot;EvoPhylo&quot;</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="do">## Then remove the dummy tip</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>final_tree <span class="ot">&lt;-</span> <span class="fu">drop.dummy.beast</span>(tree_file)</span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="do">## The output contains the final tree and the offset</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>final_tree<span class="sc">$</span>offset</span></code></pre></div>
 <pre><code>## [1] 366.4744</code></pre>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>final_tree<span class="sc">$</span>tree</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>final_tree<span class="sc">$</span>tree</span></code></pre></div>
 <pre><code>## &#39;treedata&#39; S4 object that stored information
 ## of
-##  &#39;C:/Users/tiago/AppData/Local/Temp/RtmpKyjlA3/Rbuild778056012dd8/EvoPhylo/inst/extdata/ex_offset.MCC.tre&#39;.
+##  &#39;C:/Users/tr4098admin/AppData/Local/Temp/RtmpmaaToh/Rbuild39e467432d35/EvoPhylo/inst/extdata/ex_offset.MCC.tre&#39;.
 ## 
 ## ...@ phylo:
 ## 
@@ -508,8 +509,8 @@ extinct tree with an offset.</p>
 ## #   length_range &lt;list&gt;, posterior &lt;dbl&gt;, rate &lt;dbl&gt;, rate_0.95_HPD &lt;list&gt;,
 ## #   rate_median &lt;dbl&gt;, rate_range &lt;list&gt;</code></pre>
 <p>As before, we can also save the tree directly to a file.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Remove the dummy tip and save to file</span></span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>final_tree <span class="ot">&lt;-</span> <span class="fu">drop.dummy.beast</span>(tree_file, <span class="at">output.file =</span> <span class="st">&quot;ex_final_mcc.tre&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="do">## Remove the dummy tip and save to file</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a>final_tree <span class="ot">&lt;-</span> <span class="fu">drop.dummy.beast</span>(tree_file, <span class="at">output.file =</span> <span class="st">&quot;ex_final_mcc.tre&quot;</span>)</span></code></pre></div>
 </div>
 </div>
 <div id="analyzing-trees-with-offset-ages-mr.bayes" class="section level2">
@@ -518,22 +519,21 @@ extinct tree with an offset.</p>
 have an equivalent procedure to treeWoffset from <a href="http://www.beast2.org/">BEAST2</a> for handling tip-dating
 analyses of entirely extinct lineages. In this case, it is necessary to
 manually add a “dummy” extant taxon to the dataset from the beginning of
-the analyses (as done in <span class="citation">Simões and Pierce (<a href="#ref-simões2021" role="doc-biblioref">2021</a>)</span>). This
-“dummy” tip must be scored only with missing data (“?”) and constrained
-as the sister taxon to one other taxon in the data, so it does not
-fluctuate around the tree as a wildcard. As with the MCC trees from <a href="http://www.beast2.org/">BEAST2</a>, the final summary trees from
+the analyses (as done in <span class="citation">Simões and Pierce (<a href="#ref-sim%C3%B5es2021">2021</a>)</span>). This “dummy” tip must be
+scored only with missing data (“?”) and constrained as the sister taxon
+to one other taxon in the data, so it does not fluctuate around the tree
+as a wildcard. As with the MCC trees from <a href="http://www.beast2.org/">BEAST2</a>, the final summary trees from
 Mr.Bayes [50% majority rule consensus tree (MRC) and the maximum
 compatible tree (MCT)] will have the extant “dummy’ taxon in then. It
 can be pruned using <code>drop.dummy.mb</code>:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="do">## Find the example MCC tree from the package</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>tree_file_mb <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;tree_mb_dummy.tre&quot;</span>, <span class="at">package =</span> <span class="st">&quot;EvoPhylo&quot;</span>)</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="do">## Remove the dummy tip and save to file</span></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>final_tree_mb <span class="ot">&lt;-</span> <span class="fu">drop.dummy.mb</span>(tree_file_mb, <span class="at">output.file =</span> <span class="st">&quot;tree_mb_final.tre&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="do">## Find the example MCC tree from the package</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>tree_file_mb <span class="ot">&lt;-</span> <span class="fu">system.file</span>(<span class="st">&quot;extdata&quot;</span>, <span class="st">&quot;tree_mb_dummy.tre&quot;</span>, <span class="at">package =</span> <span class="st">&quot;EvoPhylo&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="do">## Remove the dummy tip and save to file</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>final_tree_mb <span class="ot">&lt;-</span> <span class="fu">drop.dummy.mb</span>(tree_file_mb, <span class="at">output.file =</span> <span class="st">&quot;tree_mb_final.tre&quot;</span>)</span></code></pre></div>
 </div>
 <div id="references" class="section level2 unnumbered">
 <h2 class="unnumbered">References</h2>
-<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="refs" class="references csl-bib-body hanging-indent" entry-spacing="0">
 <div id="ref-BaridoSottani2020" class="csl-entry">
 Barido‐Sottani, Joëlle, Nina M. A. van Tiel, Melanie J. Hopkins, David
 F. Wright, Tanja Stadler, and Rachel C. M. Warnock. 2020. <span>“<span class="nocase">Ignoring Fossil Age Uncertainty Leads to Inaccurate

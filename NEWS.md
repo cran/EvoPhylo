@@ -2,6 +2,10 @@
 ---
 `EvoPhylo` News and Updates
 ======
+## Development: EvoPhylo 0.3.6
+(October 23rd, 2026)
+* New function `burntrees()`, an R implementation of the main features of the Perl script [burntrees.pl](https://github.com/nylander/Burntrees) (J. Nylander) for post-processing posterior tree samples: burn-in removal, thinning, combining runs, converting MrBayes clock trees from substitutions per site to time units, removing comments, branch lengths and support values, and exporting to Nexus or Newick.
+
 ## Development: EvoPhylo 0.3.5
 (August 26th, 2025)
 * Function `combine_log` now also reads and combine log files from BEAST2 and MCMCTREE
